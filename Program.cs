@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace FamAppAPI
 {
     /// <summary>
-    /// Die Hauptprogrammklasse für die FamAppAPI.
+    /// The program.
     /// </summary>
     public class Program
     {
@@ -25,6 +25,7 @@ namespace FamAppAPI
             webAppBuilder.Services.AddScoped<IUserRepository, UserRepository>();
             webAppBuilder.Services.AddScoped<IGroupsRepository, GroupsRepository>();
             webAppBuilder.Services.AddScoped<IUserInGroupRepository, UserInGroupRepository>();
+            webAppBuilder.Services.AddScoped<ICalendarRepository, CalendarRepository>();
 
             // Konfiguration von Swagger/OpenAPI
             webAppBuilder.Services.AddEndpointsApiExplorer();

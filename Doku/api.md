@@ -78,7 +78,7 @@ In Bezug auf RESTful APIs steht REST für die Grundsätze, die bei der Gestaltun
 - ### <span style="color: lightblue">**Standardmethoden:**</span>
 >RESTful APIs verwenden standardisierte HTTP-Methoden wie GET, POST, PUT und DELETE, um CRUD-Operationen (Create, Read, Update, Delete) auf Ressourcen durchzuführen.
 
-- <span style="color: lightblue">**Repräsentation:**</span>
+- ### <span style="color: lightblue">**Repräsentation:**</span>
 >Ressourcen werden durch Repräsentationen dargestellt, die in der Regel in einem bestimmten Format wie JSON oder XML vorliegen. Clients können die Ressourcen manipulieren, indem sie die entsprechenden Repräsentationen senden.
 
 Die Verwendung von REST-Prinzipien erleichtert die Entwicklung von skalierbaren und leicht verständlichen APIs. RESTful APIs sind weit verbreitet und bilden die Grundlage vieler moderner Web-Services.
@@ -94,45 +94,45 @@ Es wird für jede Tabelle ein eigener Controller erstellt, der die jeweiligen Ta
 Vorab wird im für jeden die Standartroute festgelegt:
 
 ```cs
-    namespace FamAppAPI.Controllers
-    {
-        // Der Controller zur Bearbeitung von API-Anfragen im Zusammenhang mit Gruppen
-
-        [Route("api/[controller]")]
-        [ApiController]
-        ...
-        // Weiterfolgender Code des Controllers //
-        ...
-    }
+01  namespace FamAppAPI.Controllers
+02  {
+03      // Der Controller zur Bearbeitung von API-Anfragen im Zusammenhang mit Gruppen
+04    
+05      [Route("api/[controller]")]
+06      [ApiController]
+07      ...
+08      // Weiterfolgender Code des Controllers //
+09      ...
+10  }
 ```
 
 >[controller] stellt hierbei eine Variable für die Tabellennamen dar, welche der Controller selbst verwaltet.
 Daraufhin werden im Construktor des Controllers sowohl das dazugehörige *Repository-Interface* als auch wie in unserem Fall ein *Mapper* festgelegt:
 
 ```cs
-    // Konstruktor zur Initialisierung des GroupController
-
-    public GroupController(IGroupsRepository groupsRepository, IMapper mapper)
-    {
-        _groupRepository = groupsRepository;
-        _mapper = mapper;
-    }
+01  // Konstruktor zur Initialisierung des GroupController
+02     
+03  public GroupController(IGroupsRepository groupsRepository, IMapper mapper)
+04  {
+05      _groupRepository = groupsRepository;
+06      _mapper = mapper;
+07  }
 ```
 
 > Hiernach folgen die sogenannten *Response-Methods*. Diese definieren, wie die API bzw. dieser Controller mit den gegebenen Routen umgehen muss:
 
 ```cs
-    // Eine Gruppe anhand der ID abrufen
-
-    [HttpGet("id/{groupId}")]   <-- Route dieser Anfrage
-
-    [ProducesResponseType(200, Type = typeof(Group))]   <-- Statuscode und Typ (Hier 200 = Erfolg)
-    [ProducesResponseType(404)]     <-- Statuscode 404 = Fehler
-
-    public IActionResult GetGroupById(int groupId)
-        => !_groupRepository.GroupExistsById(groupId)   <-- Prüfung ob Gruppe existiert durch eine im Repository festgelegte Methode
-        ? NotFound()    <-- Statuscode 404 = nicht gefunden
-        : Ok(_mapper.Map<GroupsDto>(_groupRepository.GetGroupById(groupId)));   <-- Falls Gruppe existiert, wird die Gruppe in ein DTO umgewandelt und als Statuscode 200 zurückgegeben
+01  // Eine Gruppe anhand der ID abrufen
+02
+03  [HttpGet("id/{groupId}")]   <-- Route dieser Anfrage
+04
+05  [ProducesResponseType(200, Type = typeof(Group))]   <-- Statuscode und Typ (Hier 200 = Erfolg)
+06  [ProducesResponseType(404)]     <-- Statuscode 404 = Fehler
+07
+08  public IActionResult GetGroupById(int groupId)
+09      => !_groupRepository.GroupExistsById(groupId)   <-- Prüfung ob Gruppe existiert durch eine im Repository festgelegte Methode
+10      ? NotFound()    <-- Statuscode 404 = nicht gefunden
+11      : Ok(_mapper.Map<GroupsDto>(_groupRepository.GetGroupById(groupId)));   <-- Falls Gruppe existiert, wird die Gruppe in ein DTO umgewandelt und als Statuscode 200 zurückgegeben
 ```
 
 >Das *DTO* (Data Transfer Object), was hier nun aufgetaucht ist, erstellen wir selbst. 
@@ -142,24 +142,24 @@ Dies hilft, die Kopplung zwischen den verschiedenen Komponenten zu reduzieren.
 Hier eine Gegenüberstellung des GroupDto mit der eigentlichen Group-Klasse:
 
 ```cs
-    public class GroupsDto
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-        public int UserId { get; set; }
-        public bool premium { get; set; }
-    }
-
-    public class Groups
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-        public int UserId { get; set; }
-        public bool premium { get; set; }
-
-        public User User { get; set; }                              <-- Nicht im GroupDto vorhanden!!
-        public ICollection<UserInGroup> UsersInGroups { get; set; } <-- Nicht im GroupDto vorhanden!!
-    }
+01  public class GroupsDto
+02  {
+03      public int id { get; set; }
+04      public string name { get; set; }
+05      public int UserId { get; set; }
+06      public bool premium { get; set; }
+07  }
+08
+09  public class Groups
+10  {
+11      public int id { get; set; }
+12      public string name { get; set; }
+13      public int UserId { get; set; }
+14      public bool premium { get; set; }
+15
+16      public User User { get; set; }                              <-- Nicht im GroupDto vorhanden!!
+17      public ICollection<UserInGroup> UsersInGroups { get; set; } <-- Nicht im GroupDto vorhanden!!
+18  }
 ```
 
 > Das DTO verhindert hier, dass die 2 Parameter User und UsersInGroups mitgesendet werden. Diese würden `<null>` zurückgeben, da sie lediglich für die Logik der API über die Datenbank existieren. 
@@ -185,11 +185,11 @@ Falls diese Gruppe nicht existiert, wird der Statuscode 404 (nicht gefunden) zur
 Derzeitig besteht die *API* aus 3 Datenbanktabellen: [^1]
 
 - ### <span style="color: lightblue">Users</span>
-> Diese Tabelle wird zur Verwaltung von Benutzern verwendet.
-Hier werden die Daten der registrierten Benutzer aufbewahrt, die bspw. zum Anmelden des Benutzers genutzt werden.
+> Diese Tabelle wird zur ==Verwaltung von Benutzern== verwendet.
+Hier werden die Daten der registrierten Benutzer aufbewahrt, die bspw. zum ==Anmelden des Benutzers== genutzt werden.
 Des Weiteren werden hier auch neue Benutzer angelegt.
 >
-> Erreicht wird die Tabelle durch den Pfad: '/api/User'
+> Erreicht wird die Tabelle durch den Pfad: <span style="color:green">'/api/User'</span>
 > Das Design der Tabelle sieht wie folgt aus:
 
 | Spalte | Beschreibung | Datentyp |
@@ -203,10 +203,10 @@ Des Weiteren werden hier auch neue Benutzer angelegt.
 ---
 
 - ### <span style="color: lightblue">Groups</span>
-> Die Tabelle *Groups* wird zum Verwaltung von Gruppen verwendet.
-Hier werden sämtliche erstellten Gruppen gespeichert. Da beim Registrieren direkt eine eigene Gruppe erstellt wird, wird diese auch direkt hier gespeichert.
+> Die Tabelle *Groups* wird zum ==Verwaltung von Gruppen== verwendet.
+Hier werden sämtliche erstellten Gruppen gespeichert. Da beim ==Registrieren direkt eine eigene Gruppe erstellt== wird, wird diese auch direkt hier gespeichert.
 >
-> Erreicht wird die Tabelle durch den Pfad: '/api/Group'
+> Erreicht wird die Tabelle durch den Pfad: <span style="color:green">'/api/Group'</span>
 > Das Design der Tabelle sieht wie folgt aus:
 
 | Spalte | Beschreibung | Datentyp |

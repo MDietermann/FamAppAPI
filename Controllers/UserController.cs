@@ -7,15 +7,30 @@ using Microsoft.AspNetCore.Mvc;
 namespace FamAppAPI.Controllers
 {
     // Controller für die Benutzerverwaltung
+    /// <summary>
+    /// The user controller.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
         #region Initialisierung
+        /// <summary>
+        /// The user repository.
+        /// </summary>
         private readonly IUserRepository _userRepository;
+
+        /// <summary>
+        /// The mapper.
+        /// </summary>
         private readonly IMapper _mapper;
 
         // Konstruktor zur Initialisierung des UserController
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// </summary>
+        /// <param name="userRepository">The user repository.</param>
+        /// <param name="mapper">The mapper.</param>
         public UserController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
@@ -27,6 +42,10 @@ namespace FamAppAPI.Controllers
 
 
         // Alle Benutzer abrufen
+        /// <summary>
+        /// Gets the users.
+        /// </summary>
+        /// <returns>IActionResult</returns>
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<User>))]
         public IActionResult GetUsers()
@@ -35,6 +54,11 @@ namespace FamAppAPI.Controllers
             : Ok(_mapper.Map<List<UserDto>>(_userRepository.GetUsers()));
 
         // Benutzer anhand der ID abrufen
+        /// <summary>
+        /// Gets the user by id.
+        /// </summary>
+        /// <param name="userId">The user id.</param>
+        /// <returns>IActionResult</returns>
         [HttpGet("id/{userId}")]
         [ProducesResponseType(200, Type = typeof(User))]
         [ProducesResponseType(404)]
@@ -44,6 +68,11 @@ namespace FamAppAPI.Controllers
             : Ok(_mapper.Map<UserDto>(_userRepository.GetUserById(userId)));
 
         // Benutzer anhand der E-Mail-Adresse abrufen
+        /// <summary>
+        /// Gets the user by mail.
+        /// </summary>
+        /// <param name="userEmail">The user email.</param>
+        /// <returns>IActionResult</returns>
         [HttpGet("mail/{userEmail}")]
         [ProducesResponseType(200, Type = typeof(User))]
         [ProducesResponseType(404)]
@@ -56,6 +85,11 @@ namespace FamAppAPI.Controllers
 
         #region POST-Methoden
 
+        /// <summary>
+        /// Creates the user.
+        /// </summary>
+        /// <param name="userCreation">The user creation.</param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -99,6 +133,12 @@ namespace FamAppAPI.Controllers
 
         #region PUT-Methoden
 
+        /// <summary>
+        /// Update user.
+        /// </summary>
+        /// <param name="userId">The user id.</param>
+        /// <param name="userUpdate">The user update.</param>
+        /// <returns>IActionResult</returns>
         [HttpPut("update/{userId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -142,6 +182,11 @@ namespace FamAppAPI.Controllers
 
         #region DELETE-Methoden
 
+        /// <summary>
+        /// Deletes the user.
+        /// </summary>
+        /// <param name="userId">The user id.</param>
+        /// <returns>IActionResult</returns>
         [HttpDelete("{userId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]

@@ -16,17 +16,36 @@ namespace FamAppAPI.Data
         {
         }
 
-        /// Ruft die Gruppen in der API ab oder legt sie fest.
+        /// <summary>
+        /// Gets or Sets the groups.
+        /// </summary>
         public DbSet<Groups> Groups { get; set; }
 
-        /// Ruft die Benutzer in der API ab oder legt sie fest.
+        /// <summary>
+        /// Gets or Sets the users.
+        /// </summary>
         public DbSet<User> Users { get; set; }
 
-        /// Ruft die Benutzer-in-Gruppen-Beziehungen in der API ab oder legt sie fest.
+        /// <summary>
+        /// Gets or Sets the users in groups.
+        /// </summary>
         public DbSet<UserInGroup> UsersInGroups { get; set; }
 
-        /// Konfiguriert das Modell für den Datenkontext.
-        /// <param name="modelBuilder">Der Modell-Builder.</param>
+        // Ruft die Kalender in der API ab oder legt sie fest.
+        /// <summary>
+        /// Gets or Sets the calendar.
+        /// </summary>
+        public DbSet<Calendar> Calendar { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the date.
+        /// </summary>
+        public DbSet<Date> Date { get; set; }
+
+        /// <summary>
+        /// On model creating.
+        /// </summary>
+        /// <param name="modelBuilder">The model builder.</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region UserInGroup

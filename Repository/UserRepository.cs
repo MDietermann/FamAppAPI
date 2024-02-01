@@ -11,14 +11,12 @@ public class UserRepository : IUserRepository
         dataContext = context;
     }
 
-    // Alle Benutzer abrufen
     public ICollection<User> GetUsers() => dataContext.Users.OrderBy(u => u.id).ToList();
 
-    // Einen Benutzer anhand der ID abrufen
-    public User GetUserById(int id) => dataContext.Users.SingleOrDefault(u => u.id == id);
+    public User? GetUserById(int id) => dataContext.Users.SingleOrDefault(u => u.id == id);
 
     // Einen Benutzer anhand der E-Mail-Adresse abrufen
-    public User GetUserByMail(string email) => dataContext.Users.SingleOrDefault(u => u.email == email);
+    public User? GetUserByMail(string email) => dataContext.Users.SingleOrDefault(u => u.email == email);
 
     // Überprüfen, ob ein Benutzer anhand der ID existiert
     public bool UserExistsById(int id) => dataContext.Users.Any(u => u.id == id);
